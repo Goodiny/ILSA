@@ -1,3 +1,4 @@
+from .sale import *
 from .saleList import *
 from .dealer import *
 from .dealerList import *
