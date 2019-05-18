@@ -1,4 +1,4 @@
-from saleList import SaleList
+from .saleList import SaleList
 from .offer import Offer
 from typing import List
 

@@ -99,9 +99,6 @@ class Ilsa(object):
             if 'name' in args:
                 if args['name'] == make.name:
                     return make
-            
-
-            
 
     def getVersion(self, make, model, version):
         makeId = make if isinstance(make, int) else Connect.getMakes()
