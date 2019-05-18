@@ -14,14 +14,14 @@ from datetime import datetime
 class Ilsa(object):
     _offerList: OfferList
     _dealerList: DealerList
-    __makeList: MakeList
+    _makeList: MakeList
 
     def getMakeList(self):
         makes_query = Connect.getMakes()
         if makes_query.status_code == 200:
             try:
                 makeList = makes_query.json()
-                self.__makeList = MakeList()
+                self._makeList = MakeList()
                 makes: List[Make] = []
                 print(len(makeList['makes']))
                 for make in makeList['makes']:
@@ -29,7 +29,7 @@ class Ilsa(object):
                     make_catalog.name = make['name']
                     make_catalog.country = make['country']
                     makes.append(make_catalog)
-                self.__makeList.makes = makes
+                self._makeList.makes = makes
             except JSONDecodeError:
                 print('Is not JSON string, sorry')
 
@@ -39,7 +39,7 @@ class Ilsa(object):
             try:
                 offerList = offer_query.json()
                 nextPageToken = offerList['nextPageToken'] if 'nextPageToken' in offerList else None
-                totalCount = offerList['totalCount']
+                self._offerList = OfferList(nextPageToken, offerList['totalCount'])
                 offers: List[Offer] = []
                 print(len(offerList['offers']))
                 for offer in offerList['offers']:
@@ -68,7 +68,7 @@ class Ilsa(object):
                         photoLinks.append(link)
                     temp_offer.photoLinks = photoLinks
                     offers.append(temp_offer)
-                self._offerList = OfferList(nextPageToken, totalCount)
+                self._offerList.offers = offers
             except JSONDecodeError:
                 print('Is not JSON string, sorry')
 
@@ -86,10 +86,10 @@ class Ilsa(object):
 
     def getMake(self, **args):
 
-        if not hasattr(self, '__makeList'):
+        if not hasattr(self, '_makeList'):
             self.getMakeList()
 
-        for make in self.__makeList.makes:
+        for make in self._makeList.makes:
             if 'id' in args:
                 if args['id'] == make.id:
                     return make
@@ -105,12 +105,14 @@ class Ilsa(object):
         self.getOfferList(token, size)
         
         count = 0
-        result: List[Offer] = []
+        if find_first == False:
+            result: List[Offer] = []
 
         while self._offerList.nextPageToken != None:
             count += 1
             print(count)
             if eq != '':
+                print(len(self._offerList.offers))
                 for offer in self._offerList.offers:
                     get_return: bool = False
                     if eq == 'vin' and value != '':
@@ -149,7 +151,7 @@ class Ilsa(object):
                         result.append(offer)
             self.getOfferList(self._offerList.nextPageToken, size=size)
 
-        return result if result.__len__() > 0 else None           
+        return result if len(result) > 0 else None           
 
 if __name__ == '__main__':
     ilsa = Ilsa()

@@ -10,6 +10,7 @@ class OfferList(SaleList):
     def __init__(self, nextPageTOken: str, totalCount: int):
         super().__init__(nextPageTOken, self.__kind)
         self.__totalCout = totalCount
+        self.__offers = []
     @property
     def totalCount(self) -> int:
         return self.__totalCount
