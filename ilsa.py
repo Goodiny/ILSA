@@ -1,11 +1,6 @@
 from api import *
-from model import Offer 
-from model import OfferList
-from model import OfferConfiguration
-from model import OfferPromotion
-from model import Dealer
-from model import DealerList
-from model import DealerLocation
+from model import Offer, OfferList, OfferConfiguration, OfferPromotion
+from model import Dealer, DealerList, DealerLocation
 from model import MakeList, Make
 from json.decoder import JSONDecodeError
 from typing import List
