@@ -2,7 +2,6 @@ from .catalogList import CatalogList
 
 from typing import List
 
-
 class Edition(CatalogList):
     __kind: str = 'catalog#edition'
     __modelCode: str
