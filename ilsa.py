@@ -1,11 +1,12 @@
 from api import *
-from model.sale import Offer
-from model.sale import OfferList
-from model.sale import OfferConfiguration
-from model.sale import OfferPromotion
-from model.sale import Dealer
-from model.sale import DealerList
-from model.sale import DealerLocation
+from model import Offer 
+from model import OfferList
+from model import OfferConfiguration
+from model import OfferPromotion
+from model import Dealer
+from model import DealerList
+from model import DealerLocation
+from model import MakeList, Make
 from json.decoder import JSONDecodeError
 from typing import List
 from datetime import datetime
@@ -13,6 +14,24 @@ from datetime import datetime
 class Ilsa(object):
     _offerList: OfferList
     _dealerList: DealerList
+    __makeList: MakeList
+
+    def getMakeList(self):
+        makes_query = Connect.getMakes()
+        if makes_query.status_code == 200:
+            try:
+                makeList = makes_query.json()
+                self.__makeList = MakeList()
+                makes: List[Make] = []
+                print(len(makeList['makes']))
+                for make in makeList['makes']:
+                    make_catalog = Make(make['id'])
+                    make_catalog.name = make['name']
+                    make_catalog.country = make['country']
+                    makes.append(make_catalog)
+                self.__makeList.makes = makes
+            except JSONDecodeError:
+                print('Is not JSON string, sorry')
 
     def getOfferList(self, token='', size=100):
         offer_query = Connect.getOffers(token, size)
@@ -23,7 +42,7 @@ class Ilsa(object):
                 nextPageToken = offerList['nextPageToken'] if 'nextPageToken' in offerList else None
                 totalCount = offerList['totalCount']
                 offers: List[Offer] = []
-                print(offerList['offers'].__len__())
+                print(len(offerList['offers']))
                 for offer in offerList['offers']:
                     temp_offer = Offer()
                     config = offer['configuration']
@@ -57,9 +76,37 @@ class Ilsa(object):
                 print('Is not JSON string, sorry')
 
     def findOfferByVin(self, vin, token=''):
-        return self.walkOffers(token, vin, 'vin', size=1000)
+        return self.walkOffers(token, vin, 'vin', True, size=1000)
 
-    def walkOffers(self, token='', value='', eq='', size=100):
+    def findOffersByVin(self, vin, token=''):
+        return self.walkOffers(token, vin, 'vin', False, size=1000)
+    
+    def findOffersByVersion(self, version, token=''):
+        return self.walkOffers(token, version, 'version', False, size=1000)
+
+    def findOfferByVersion(self, version, token=''):
+        return self.walkOffers(token, version, 'version', True, size=1000)
+
+    def getMake(self, **args):
+
+        if not hasattr(self, '__makeList'):
+            self.getMakeList()
+
+        for make in self.__makeList.makes:
+            if 'id' in args:
+                if args['id'] == make.id:
+                    return make
+            if 'name' in args:
+                if args['name'] == make.name:
+                    return make
+            
+
+            
+
+    def getVersion(self, make, model, version):
+        makeId = make if isinstance(make, int) else Connect.getMakes()
+
+    def walkOffers(self, token:int='', value:str='', eq:str='', find_first:bool=False, size:int=100):
 
         self.getOfferList(token, size)
         
@@ -103,6 +150,8 @@ class Ilsa(object):
                         if value == offer.price:
                             get_return = True
                     if get_return == True:
+                        if find_first == True:
+                            return offer
                         result.append(offer)
             self.getOfferList(self._offerList.nextPageToken, size=size)
 
@@ -116,7 +165,7 @@ if __name__ == '__main__':
     print(offer.configuration.make if offer != None else None )
     # ilsa.getOfferList(size=1000)
     # ilsa.getOfferList(ilsa._offerList.nextPageToken, size=1000)
-    ilsa.walkOffers(size=1000)
+    # ilsa.walkOffers(size=1000)
 
             
         
