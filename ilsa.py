@@ -57,33 +57,63 @@ class Ilsa(object):
                 print('Is not JSON string, sorry')
 
     def findOfferByVin(self, vin, token=''):
+        return self.walkOffers(token, vin, 'vin', size=1000)
 
-        self.getOfferList(token, size=1000)
-
-        while self._offerList.nextPageToken != None:
-            for offer in self._offerList.offers:
-                if vin == offer.sku:
-                    return offer
-            self.getOfferList(self._offerList.nextPageToken, size=1000)
-        return None
-
-    def walkOffers(self, token='', size=100):
+    def walkOffers(self, token='', value='', eq='', size=100):
 
         self.getOfferList(token, size)
         
         count = 0
+        result: List[Offer] = []
 
         while self._offerList.nextPageToken != None:
             count += 1
-            print(count)  
+            print(count)
+            if eq != '':
+                for offer in self._offerList.offers:
+                    get_return: bool = False
+                    if eq == 'vin' and value != '':
+                        if value == offer.sku:
+                            get_return = True 
+                    elif eq == 'make' and value != '':
+                        if value== offer.configuration.make:
+                            get_return = True
+                    elif eq == 'model' and value != '':
+                        if value == offer.configuration.model:
+                            get_return = True
+                    elif eq == 'version' and value != '':
+                        if value == offer.configuration.version:
+                            get_return = True
+                    elif eq == 'color' and value != '':
+                        if value == offer.configuration.color:
+                            get_return = True
+                    elif eq == 'edition' and value != '':
+                        if value == offer.configuration.edition:
+                            get_return = True
+                    elif eq == 'modification' and value != '':
+                        if value == offer.configuration.modification:
+                            get_return = True
+                    elif eq == 'delaer' and value != '':
+                        if value == offer.dealer:
+                            get_return = True
+                    elif eq == 'id' and value != '':
+                        if value == offer.id:
+                            get_return = True
+                    elif eq == 'price' and value != '':
+                        if value == offer.price:
+                            get_return = True
+                    if get_return == True:
+                        result.append(offer)
             self.getOfferList(self._offerList.nextPageToken, size=size)
+
+        return result if result.__len__() > 0 else None           
 
 if __name__ == '__main__':
     ilsa = Ilsa()
 
-    # offer = ilsa.findOfferByVin('XW8ZZZ61ZKG054311')
+    offer = ilsa.findOfferByVin('XW8ZZZ61ZKG054311')
 
-    # print(offer.configuration.make if offer != None else None )
+    print(offer.configuration.make if offer != None else None )
     # ilsa.getOfferList(size=1000)
     # ilsa.getOfferList(ilsa._offerList.nextPageToken, size=1000)
     ilsa.walkOffers(size=1000)
