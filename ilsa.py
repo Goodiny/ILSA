@@ -38,16 +38,13 @@ class Ilsa(object):
         if offer_query.status_code == 200:
             try:
                 offerList = offer_query.json()
-                kind = offerList['kind']
                 nextPageToken = offerList['nextPageToken'] if 'nextPageToken' in offerList else None
                 totalCount = offerList['totalCount']
                 offers: List[Offer] = []
                 print(len(offerList['offers']))
                 for offer in offerList['offers']:
-                    temp_offer = Offer()
+                    temp_offer = Offer(offer['id'])
                     config = offer['configuration']
-                    temp_offer.kind = offer['kind']
-                    temp_offer.id = offer['id']
                     temp_offer.sku = offer['sku']
                     temp_offer.updateTime = datetime.strptime(offer['updateTime'], '%Y-%m-%dT%H:%M:%S%z')
                     temp_offer.availability = offer['availability']
@@ -71,7 +68,7 @@ class Ilsa(object):
                         photoLinks.append(link)
                     temp_offer.photoLinks = photoLinks
                     offers.append(temp_offer)
-                self._offerList = OfferList(kind, nextPageToken, totalCount, offers)
+                self._offerList = OfferList(nextPageToken, totalCount)
             except JSONDecodeError:
                 print('Is not JSON string, sorry')
 

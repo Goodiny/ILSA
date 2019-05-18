@@ -49,7 +49,7 @@ class Offer(Sale):
         return self.__promotion
     @promotion.setter
     def promotion(self, value: OfferPromotion):
-        self.__promotion
+        self.__promotion = value
     @property
     def sku(self) -> str:
         return self.__sku
