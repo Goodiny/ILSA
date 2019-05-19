@@ -8,3 +8,10 @@ from .model import *
 from .modelList import *
 from .version import *
 from .versionList import *
+from .describe import *
+from .description import *
+from .feature import *
+from .specification import *
+from .ins import *
+from .headline import *
+from .edition import *
