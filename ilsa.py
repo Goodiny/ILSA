@@ -154,7 +154,4 @@ if __name__ == '__main__':
     print(offer.configuration.make if offer != None else None )
     # ilsa.getOfferList(size=1000)
     # ilsa.getOfferList(ilsa._offerList.nextPageToken, size=1000)
-    # ilsa.walkOffers(size=1000)
-
-            
-        
+    # ilsa.walkOffers(size=1000)     
