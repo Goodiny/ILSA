@@ -48,22 +48,20 @@ class Ilsa(object):
                     temp_offer.year = offer['year']
                     temp_offer.price = offer['price']
                     temp_offer.retailPrice = offer['retailPrice'] if 'retailPrice' in offer else None
-                    config_id = config['id']
-                    make = config['make']
-                    model = config['model']
-                    version = config['version']
-                    color = config['color']
-                    edition = config['edition']
-                    modification = config['modification']
-                    imageLink = config['imageLink']   
-                    temp_offer.configuration = OfferConfiguration(config_id, make, model, version, color, edition, modification, imageLink)
+                    temp_offer.configuration = OfferConfiguration(config['id'])
+                    temp_offer.configuration.make = config['make']
+                    temp_offer.configuration.model = config['model']
+                    temp_offer.configuration.version = config['version']
+                    temp_offer.configuration.color = config['color']
+                    temp_offer.configuration.edition = config['edition']
+                    temp_offer.configuration.modification = config['modification']
+                    temp_offer.configuration.imageLink = config['imageLink']   
                     temp_offer.promotion = OfferPromotion(offer['promotion']['special'])
                     photoLinks = []
                     for link in offer['photoLinks']:
                         photoLinks.append(link)
                     temp_offer.photoLinks = photoLinks
-                    offers.append(temp_offer)
-                self._offerList.offers = offers
+                    self._offerList.add(temp_offer)
             except JSONDecodeError:
                 print('Is not JSON string, sorry')
 

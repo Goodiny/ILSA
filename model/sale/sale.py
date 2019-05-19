@@ -1,5 +1,4 @@
 class Sale(object):
-    __kind: str
     __id: int
     def __init__(self, id:int, kind:str='sale#sale'):
         self.__kind = kind
