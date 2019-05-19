@@ -7,9 +7,9 @@ class Connect(object):
     _catalog = 'https://api.ilsa.ru/catalog/v1/'
 
     @classmethod
-    def getOffers(self, token='', size=100):
+    def getOffers(cls, token='', size=100):
 
-        link = self._sale + 'offers'
+        link = cls._sale + 'offers'
 
         print('Connect to {link} at {time}'.format(link=link, time=datetime.now().strftime('%H:%M:%S%Z%z %a %d %b %Y')))
 
@@ -19,14 +19,14 @@ class Connect(object):
         print(query_string)
 
         try:
-            return requests.get(link + '?' + self._key + query_string)
+            return requests.get(link + '?' + cls._key + query_string)
         except ConnectionError:
             print('Connection Error in class Connect')
 
     @classmethod
-    def getDealers(self, token='', size=100):
+    def getDealers(cls, token='', size=100):
 
-        link = self._sale + 'dealers'
+        link = cls._sale + 'dealers'
 
         print('Connect to {link} at {time}'.format(link=link, time=datetime.now().strftime('%H:%M:%S%Z%z %a %d %b %Y')))
 
@@ -36,62 +36,62 @@ class Connect(object):
         print(query_string)
 
         try:
-            return requests.get(link + '?' + self._key + query_string)
+            return requests.get(link + '?' + cls._key + query_string)
         except ConnectionError:
             print('Connection Error')
 
     @classmethod
-    def getMakes(self):
+    def getMakes(cls):
 
-        link = self._catalog + 'makes'
+        link = cls._catalog + 'makes'
 
         print('Connect to {link} at {time}'.format(link=link, time=datetime.now().strftime('%H:%M:%S%Z%z %a %d %b %Y')))
 
         try:
-            return requests.get(link + '?' + self._key)
+            return requests.get(link + '?' + cls._key)
         except ConnectionError:
             print('Connection Error')
     
     @classmethod
-    def getModels(self, makeId):
+    def getModels(cls, makeId):
 
-        link = self._catalog + 'makes/' + str(makeId) + '/models'
+        link = cls._catalog + 'makes/' + str(makeId) + '/models'
 
         print('Connect to {link} at {time}'.format(link=link, time=datetime.now().strftime('%H:%M:%S%Z%z %a %d %b %Y')))
 
         try:
-            return requests.get(link + '?' + self._key)
+            return requests.get(link + '?' + cls._key)
         except ConnectionError:
             print('Connection Error')
 
     @classmethod
-    def getVersions(self, makeId, modelId):
+    def getVersions(cls, makeId, modelId):
 
-        link = self._catalog + 'makes/' + str(makeId) + '/models/' + str(modelId) + '/versions'
+        link = cls._catalog + 'makes/' + str(makeId) + '/models/' + str(modelId) + '/versions'
 
         print('Connect to {link}at {time}'.format(link=link, time=datetime.now().strftime('%H:%M:%S%Z%z %a %d %b %Y')))
 
         try:
-            return requests.get(link + '?' + self._key)
+            return requests.get(link + '?' + cls._key)
         except ConnectionError:
             print('Connection Error')
 
     @classmethod
-    def getEditions(self, editionId):
+    def getEditions(cls, editionId):
         
-        link = self._catalog + 'editions/' + str(editionId)
+        link = cls._catalog + 'editions/' + str(editionId)
 
         print('Connect to {link} ast {time}'.format(link=link, time=datetime.now().strftime('%H:%M:%S%Z%z %a %d %b %Y')))
 
         try:
-            return requests.get(link + '?' + self._key)
+            return requests.get(link + '?' + cls._key)
         except ConnectionError:
             print('Connection Error')
     
     @classmethod
-    def getModifications(self, token='', size=100):
+    def getModifications(cls, token='', size=100):
 
-        link = self._catalog + 'modifications'
+        link = cls._catalog + 'modifications'
 
         print('Connect to {link} at {time}'.format(link=link, time=datetime.now().strftime('%H:%M:%S%Z%z %a %d %b %Y')))
 
@@ -101,6 +101,6 @@ class Connect(object):
         print(query_string)
 
         try:
-            return requests.get(link + '?' + self._key + query_string)
+            return requests.get(link + '?' + cls._key + query_string)
         except ConnectionError:
             print('Connection Error')
