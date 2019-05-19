@@ -1,7 +1,7 @@
 class OfferPromotion(object):
     __special: bool
-    def __init__(self, special: bool):
-        self.special = special
+    def __init__(self, special: bool=False):
+        self.__special = special
     @property
     def special(self) -> bool:
         return self.__special

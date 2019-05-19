@@ -20,3 +20,5 @@ class OfferList(SaleList):
     @offers.setter
     def offers(self, value: List[Offer]):
         self.__offers = value
+    def add(self, obj: Offer):
+        self.__offers.append(obj)
