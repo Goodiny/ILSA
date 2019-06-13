@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*–
+
 import re
 
 def replace_all(txt, r_dict):
